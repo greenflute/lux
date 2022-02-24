@@ -192,7 +192,14 @@ func Size(url, refer string) (int64, error) {
 	}
 	s := h.Get("Content-Length")
 	if s == "" {
-		return 0, errors.New("Content-Length is not present")
+		fmt.Fprintf(color.Output, "Content-Length is not present, try failsafe method")
+		// try GetByte
+		body, err := GetByte(url, refer, map[string]string{"User-Agent": userAgent})
+		if err != nil {
+			return 0, errors.New("Content-Length failsafe resort failed too")
+		}
+		glen := len(body)
+		return int64(glen), nil
 	}
 	size, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {

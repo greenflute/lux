@@ -4,26 +4,19 @@ import (
 	"bufio"
 	"bytes"
 	"crypto/md5"
-	"errors"
 	"fmt"
 	"io"
 	"net/url"
 	"os"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"runtime"
 	"strings"
 
-	"github.com/tidwall/gjson"
+	"github.com/pkg/errors"
 
 	"github.com/iawia002/lux/request"
 )
-
-// GetStringFromJSON get the string value from json path
-func GetStringFromJSON(json, path string) string {
-	return gjson.Get(json, path).String()
-}
 
 // MatchOneOf match one of the patterns
 func MatchOneOf(text string, patterns ...string) []string {
@@ -166,24 +159,11 @@ func ParseInputFile(r io.Reader, items string, itemStart, itemEnd int) []string 
 	return itemList
 }
 
-// ItemInSlice if a item is in the list
-func ItemInSlice(item, list interface{}) bool {
-	v1 := reflect.ValueOf(item)
-	v2 := reflect.ValueOf(list)
-	for i := 0; i < v2.Len(); i++ {
-		indexType := v2.Index(i).Type().String()
-		if v1.Type().String() != indexType {
-			continue
-		}
-		switch indexType {
-		case "int":
-			if v1.Int() == v2.Index(i).Int() {
-				return true
-			}
-		case "string":
-			if v1.String() == v2.Index(i).String() {
-				return true
-			}
+// ItemInSlice returns true if an item is in the list.
+func ItemInSlice[Item comparable](item Item, list []Item) bool {
+	for _, v := range list {
+		if item == v {
+			return true
 		}
 	}
 	return false
@@ -227,7 +207,7 @@ func M3u8URLs(uri string) ([]string, error) {
 
 	html, err := request.Get(uri, "", nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	lines := strings.Split(html, "\n")
 	var urls []string

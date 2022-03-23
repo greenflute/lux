@@ -10,10 +10,8 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/go-rod/rod"
 	"github.com/urfave/cli/v2"
 
-	"github.com/iawia002/lux/cookier"
 	"github.com/iawia002/lux/downloader"
 	"github.com/iawia002/lux/extractors"
 	"github.com/iawia002/lux/request"
@@ -23,7 +21,7 @@ import (
 const (
 	// Name is the name of this app.
 	Name    = "lux"
-	version = "v0.13.0"
+	version = "v0.14.0"
 )
 
 func init() {
@@ -234,11 +232,6 @@ func New() *cli.App {
 					}
 					cookie = strings.TrimSpace(string(data))
 				}
-			} else {
-				// Try to use current user's cookie if possible, if failed empty cookie will be used
-				_ = rod.Try(func() {
-					cookie = cookier.Get(args...)
-				})
 			}
 
 			request.SetOptions(request.Options{
@@ -255,9 +248,10 @@ func New() *cli.App {
 				if err := download(c, videoURL); err != nil {
 					fmt.Fprintf(
 						color.Output,
-						"Downloading %s error:\n%s\n",
-						color.CyanString("%s", videoURL), color.RedString("%v", err),
+						"Downloading %s error:\n",
+						color.CyanString("%s", videoURL),
 					)
+					fmt.Printf("%+v\n", err)
 					isErr = true
 				}
 			}
@@ -293,11 +287,13 @@ func download(c *cli.Context, videoURL string) error {
 	}
 
 	if c.Bool("json") {
-		jsonData, err := json.MarshalIndent(data, "", "\t")
-		if err != nil {
+		e := json.NewEncoder(os.Stdout)
+		e.SetIndent("", "\t")
+		e.SetEscapeHTML(false)
+		if err := e.Encode(data); err != nil {
 			return err
 		}
-		fmt.Printf("%s\n", jsonData)
+
 		return nil
 	}
 

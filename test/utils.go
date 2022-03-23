@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"sort"
 	"testing"
 
@@ -37,7 +38,10 @@ func Check(t *testing.T, args Args, data *extractors.Data) {
 	for _, s := range data.Streams {
 		sortedStreams = append(sortedStreams, s)
 	}
-	sort.Slice(sortedStreams, func(i, j int) bool { return sortedStreams[i].Size > sortedStreams[j].Size })
+	if len(sortedStreams) == 0 {
+		t.Fatalf("stream should not empty")
+	}
+	sort.SliceStable(sortedStreams, func(i, j int) bool { return sortedStreams[i].Size > sortedStreams[j].Size })
 	defaultData := sortedStreams[0]
 
 	temp := Args{
@@ -53,6 +57,6 @@ func Check(t *testing.T, args Args, data *extractors.Data) {
 // CheckError check the error
 func CheckError(t *testing.T, err error) {
 	if err != nil {
-		t.Fatalf("Unexpected error: %v", err)
+		t.Fatalf("Unexpected error:\n%s", fmt.Sprintf("%+v\n", err))
 	}
 }

@@ -69,7 +69,6 @@ func New(option Options) *Downloader {
 
 // caption downloads danmaku, subtitles, etc
 func (downloader *Downloader) caption(url, fileName, ext string, transform func([]byte) ([]byte, error)) error {
-
 	refer := downloader.option.Refer
 	if refer == "" {
 		refer = url
@@ -358,7 +357,6 @@ func (downloader *Downloader) multiThreadSave(dataPart *extractors.Part, refer, 
 			} else {
 				chunkSize = int64(downloader.option.ChunkSizeMB) * 1024 * 1024
 			}
-			end = computeEnd(part.Cur, chunkSize, part.End)
 			remainingSize := part.End - part.Cur + 1
 			if part.Cur == part.Start {
 				// Only write part to new file.
@@ -645,7 +643,12 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 		wgp.Add()
 		go func(part *extractors.Part, fileName string) {
 			defer wgp.Done()
-			err := downloader.save(part, data.URL, fileName)
+			var err error
+			if downloader.option.MultiThread {
+				err = downloader.multiThreadSave(part, data.URL, fileName)
+			} else {
+				err = downloader.save(part, data.URL, fileName)
+			}
 			if err != nil {
 				lock.Lock()
 				errs = append(errs, err)

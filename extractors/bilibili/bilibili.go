@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/iawia002/pandora/array"
+	"github.com/iawia002/lia/array"
 	"github.com/pkg/errors"
 
 	"github.com/iawia002/lux/extractors"
@@ -477,7 +477,6 @@ func getSubTitleCaptionPart(aid int, cid int) *extractors.CaptionPart {
 		},
 		Transform: subtitleTransform,
 	}
-
 }
 
 func subtitleTransform(body []byte) ([]byte, error) {

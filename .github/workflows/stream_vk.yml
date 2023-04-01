@@ -1,14 +1,14 @@
-name: douyin
+name: vk
 
 on:
   push:
     paths:
-      - "extractors/douyin/*.go"
-      - ".github/workflows/stream_douyin.yml"
+      - "extractors/vk/*.go"
+      - ".github/workflows/stream_vk.yml"
   pull_request:
     paths:
-      - "extractors/douyin/*.go"
-      - ".github/workflows/stream_douyin.yml"
+      - "extractors/vk/*.go"
+      - ".github/workflows/stream_vk.yml"
   schedule:
     # run ci weekly
     - cron: "0 0 * * 0"
@@ -28,4 +28,4 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: Test
-        run: go test -timeout 5m -race -coverpkg=./... -coverprofile=coverage.txt github.com/iawia002/lux/extractors/douyin
+        run: go test -timeout 5m -race -coverpkg=./... -coverprofile=coverage.txt github.com/iawia002/lux/extractors/vk

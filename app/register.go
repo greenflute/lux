@@ -31,6 +31,7 @@ import (
 	_ "github.com/iawia002/lux/extractors/udn"
 	_ "github.com/iawia002/lux/extractors/universal"
 	_ "github.com/iawia002/lux/extractors/vimeo"
+	_ "github.com/iawia002/lux/extractors/vk"
 	_ "github.com/iawia002/lux/extractors/weibo"
 	_ "github.com/iawia002/lux/extractors/ximalaya"
 	_ "github.com/iawia002/lux/extractors/xinpianchang"
@@ -38,4 +39,5 @@ import (
 	_ "github.com/iawia002/lux/extractors/yinyuetai"
 	_ "github.com/iawia002/lux/extractors/youku"
 	_ "github.com/iawia002/lux/extractors/youtube"
+	_ "github.com/iawia002/lux/extractors/zhihu"
 )

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
@@ -21,7 +20,7 @@ import (
 const (
 	// Name is the name of this app.
 	Name    = "lux"
-	version = "v0.15.0"
+	version = "v0.17.2"
 )
 
 func init() {
@@ -178,7 +177,7 @@ func New() *cli.App {
 			&cli.StringFlag{
 				Name:    "youku-ccode",
 				Aliases: []string{"ccode"},
-				Value:   "0532",
+				Value:   "0502",
 				Usage:   "Youku ccode",
 			},
 			&cli.StringFlag{
@@ -226,7 +225,7 @@ func New() *cli.App {
 				// If cookie is a file path, convert it to a string to ensure cookie is always string
 				if _, fileErr := os.Stat(cookie); fileErr == nil {
 					// Cookie is a file
-					data, err := ioutil.ReadFile(cookie)
+					data, err := os.ReadFile(cookie)
 					if err != nil {
 						return err
 					}

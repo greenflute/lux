@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/iawia002/pandora/array"
+	"github.com/iawia002/lia/array"
 	"github.com/pkg/errors"
 
 	"github.com/iawia002/lux/extractors"
@@ -24,7 +24,7 @@ type qqVideoInfo struct {
 			ID    int    `json:"id"`
 			Name  string `json:"name"`
 			Cname string `json:"cname"`
-			Fs    int    `json:"fs"`
+			Fs    int64  `json:"fs"`
 		} `json:"fi"`
 	} `json:"fl"`
 	Vl struct {

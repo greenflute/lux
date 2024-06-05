@@ -630,6 +630,7 @@ $ lux -j "https://www.bilibili.com/video/av20203945"
 | XVIDEOS          | <https://xvideos.com>                                                     | ✓        |          |         |            |                  | [![xvideos](https://github.com/iawia002/lux/actions/workflows/stream_xvideos.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_xvideos.yml)                |
 | 聯合新聞網       | <https://udn.com>                                                         | ✓        |          |         |            |                  | [![udn](https://github.com/iawia002/lux/actions/workflows/stream_udn.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_udn.yml)                            |
 | TikTok           | <https://www.tiktok.com>                                                  | ✓        |          |         |            |                  | [![tiktok](https://github.com/iawia002/lux/actions/workflows/stream_tiktok.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_tiktok.yml)                   |
+| Pinterest        | <https://www.pinterest.com>                                               | ✓        |          |         |            |                  | [![pinterest](https://github.com/iawia002/lux/actions/workflows/stream_pinterest.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_pinterest.yml)          |
 | 好看视频         | <https://haokan.baidu.com>                                                | ✓        |          |         |            |                  | [![haokan](https://github.com/iawia002/lux/actions/workflows/stream_haokan.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_haokan.yml)                   |
 | AcFun            | <https://www.acfun.cn>                                                    | ✓        |          |         | ✓          |                  | [![acfun](https://github.com/iawia002/lux/actions/workflows/stream_acfun.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_acfun.yml)                      |
 | Eporner          | <https://eporner.com>                                                     | ✓        |          |         |            |                  | [![eporner](https://github.com/iawia002/lux/actions/workflows/stream_eporner.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_eporner.yml)                |
@@ -641,6 +642,9 @@ $ lux -j "https://www.bilibili.com/video/av20203945"
 | Reddit           | <https://www.reddit.com>                                                  | ✓        | ✓        |         |            |                  | [![reddit](https://github.com/iawia002/lux/actions/workflows/stream_reddit.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_reddit.yml)                   |
 | VKontakte        | <https://vk.com>                                                          | ✓        |          |         |            |                  | [![vk](https://github.com/iawia002/lux/actions/workflows/stream_vk.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_vk.yml/)                              |
 | 知乎             | <https://zhihu.com>                                                       | ✓        |          |         |            |                  | [![zhihu](https://github.com/iawia002/lux/actions/workflows/stream_zhihu.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_zhihu.yml/)                     |
+| Rumble           | <https://rumble.com>                                                      | ✓        |          |         |            |                  | [![rumble](https://github.com/iawia002/lux/actions/workflows/stream_rumble.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_rumble.yml/)                  |
+| 小红书           | <https://xiaohongshu.com>                                                 | ✓        |          |         |            |                  | [![xiaohongshu](https://github.com/iawia002/lux/actions/workflows/stream_xiaohongshu.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_xiaohongshu.yml/)   |
+| Zing MP3         | <https://zingmp3.vn>                                                      | ✓        |          | ✓       |            |                  | [![zingmp3](https://github.com/iawia002/lux/actions/workflows/stream_zingmp3.yml/badge.svg)](https://github.com/iawia002/lux/actions/workflows/stream_zingmp3.yml/)               |
 
 
 ## Known issues
@@ -650,6 +654,13 @@ $ lux -j "https://www.bilibili.com/video/av20203945"
 优酷的 `ccode` 经常变化导致 lux 不可用，如果你知道有新的可用的 `ccode`，可以直接使用 `lux -ccode ...` 而不用等待 lux 更新（当然，也欢迎你给我们提一个 Pull request 来更新默认的 `ccode`）
 
 最好是每次下载都附带登录过的 Cookie 以避免部分 `ccode` 的问题
+
+### 西瓜/头条视频
+西瓜/头条视频必须带 Cookie 才能下载成功，西瓜和头条可共用西瓜视频的 Cookie，Cookie 的有效期可能较短，下载失败就更新 Cookie 尝试：
+
+```
+$ lux -c "msToken=yoEh0-qLUq4obZ8Sfxsem_CxCo9R3NM6ViTrWaRcM1...; ttwid=1%7C..." "https://m.toutiao.com/is/iYbTfJ79/"
+```
 
 ## Contributing
 
@@ -665,6 +676,7 @@ Code with ❤️ by [iawia002](https://github.com/iawia002) and lovely [contribu
 
 ## Similar projects
 
+- [youtube](https://github.com/kkdai/youtube)
 - [youtube-dl](https://github.com/rg3/youtube-dl)
 - [you-get](https://github.com/soimort/you-get)
 - [ytdl](https://github.com/rylio/ytdl)

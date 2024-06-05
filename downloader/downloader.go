@@ -28,6 +28,7 @@ type Options struct {
 	InfoOnly       bool
 	Silent         bool
 	Stream         string
+	AudioOnly      bool
 	Refer          string
 	OutputPath     string
 	OutputName     string
@@ -50,6 +51,10 @@ type Downloader struct {
 	bar    *pb.ProgressBar
 	option Options
 }
+
+const (
+	DOWNLOAD_FILE_EXT = ".download"
+)
 
 func progressBar(size int64) *pb.ProgressBar {
 	tmpl := `{{counters .}} {{bar . "[" "=" ">" "-" "]"}} {{speed .}} {{percent . | green}} {{rtime .}}`
@@ -134,7 +139,7 @@ func (downloader *Downloader) save(part *extractors.Part, refer, fileName string
 		return nil
 	}
 
-	tempFilePath := filePath + ".download"
+	tempFilePath := filePath + DOWNLOAD_FILE_EXT
 	tempFileSize, _, err := utils.FileSize(tempFilePath)
 	if err != nil {
 		return err
@@ -232,7 +237,7 @@ func (downloader *Downloader) multiThreadSave(dataPart *extractors.Part, refer, 
 		downloader.bar.Add64(fileSize)
 		return nil
 	}
-	tmpFilePath := filePath + ".download"
+	tmpFilePath := filePath + DOWNLOAD_FILE_EXT
 	tmpFileSize, tmpExists, err := utils.FileSize(tmpFilePath)
 	if err != nil {
 		return err
@@ -452,7 +457,7 @@ func parseFilePartMeta(filepath string, fileSize int64) (*FilePartMeta, error) {
 		return nil, errors.WithStack(err)
 	}
 	if readSize < size {
-		return nil, errors.Errorf("the file has been broked, please delete all part files and re-download")
+		return nil, errors.Errorf("the file has been broken, please delete all part files and re-download")
 	}
 	err = binary.Read(bytes.NewBuffer(buf[:size]), binary.LittleEndian, meta)
 	if err != nil {
@@ -468,7 +473,7 @@ func writeFilePartMeta(file *os.File, meta *FilePartMeta) error {
 }
 
 func mergeMultiPart(filepath string, parts []*FilePartMeta) error {
-	tempFilePath := filepath + ".download"
+	tempFilePath := filepath + DOWNLOAD_FILE_EXT
 	tempFile, err := os.OpenFile(tempFilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return err
@@ -566,6 +571,26 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 	stream, ok := data.Streams[streamName]
 	if !ok {
 		return errors.Errorf("no stream named %s", streamName)
+	}
+
+	if downloader.option.AudioOnly {
+		var isFound bool
+		reg, err := regexp.Compile("audio+")
+		if err != nil {
+			return err
+		}
+
+		for _, s := range sortedStreams {
+			// Looking for the best quality
+			if reg.MatchString(s.Quality) {
+				isFound = true
+				stream = data.Streams[s.ID]
+				break
+			}
+		}
+		if !isFound {
+			return errors.Errorf("No audio stream found")
+		}
 	}
 
 	if !downloader.option.Silent {
